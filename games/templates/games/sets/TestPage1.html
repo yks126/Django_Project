@@ -1,0 +1,516 @@
+{% load static %}
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>練習1</title>
+</head>
+<style>
+    body {
+        background-color: #f5f5f5; /* 整个页面的背景设为灰色 */
+    }
+
+    .flex-container {
+        display: flex; /* 啟用 Flexbox 布局 */
+        justify-content: space-between; /* 兩部分之間保持間隔 */
+    }
+
+    .explanation-section, .game-section {
+        width: 48%; /* 兩部分各佔據大約一半的寬度 */
+    }
+
+    .number-img {
+        width: 100px; /* 設置圖片寬度 */
+        height: auto; /* 高度自動調整以保持圖片比例 */
+    }
+
+    .bordered-table {
+        border-collapse: collapse; /* 移除表格間距 */
+    }
+
+    .bordered-table td,
+    .bordered-table th {
+        grid-gap: 3.5px; /* 格子之间的间隔 */
+    justify-content: center;
+    margin: 20px auto; /* 居中且有上下间距 */
+    padding: 10px;
+    background-color: #e5e4e4; /* 轻微灰色背景 */
+    }
+
+    .no-border-table {
+        border-collapse: collapse; /* 移除表格間距 */
+    }
+
+    .no-border-table td,
+    .no-border-table th {
+        border: none; /* 無框線 */
+    }
+
+
+
+       table {
+        border-collapse: collapse; /* 移除表格间距 */
+    }
+
+
+    .flex-container {
+        display: flex; /* 启用 Flexbox 布局 */
+        justify-content: space-between; /* 两部分之间保持间隔 */
+    }
+    .flex-container {
+        display: flex; /* 啟用 Flexbox 布局 */
+        justify-content: space-between; /* 兩部分之間保持間隔 */
+    }
+
+
+
+    .number-img {
+        width: 100px; /* 設置圖片寬度 */
+        height: auto; /* 高度自動調整以保持圖片比例 */
+    }
+
+.bordered-table {
+    width: 100%; /* 表格宽度填满容器 */
+    border-collapse: collapse; /* 移除表格间距 */
+    margin: 20px 0; /* 在表格上下添加一些外边距 */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* 添加轻微的阴影效果 */
+    background-color: #f8f9fa; /* 轻微的背景色 */
+}
+
+.bordered-table td,
+.bordered-table th {
+    border: 1px solid #dee2e6; /* 设置边框颜色 */
+    padding: 8px; /* 添加一些内边距 */
+    text-align: left; /* 文字对齐 */
+}
+
+
+.bordered-table tr:nth-child(even) {
+    background-color: #f2f2f2; /* 为偶数行添加背景色 */
+}
+
+    /* 新的消息表格样式 */
+    .result-message {
+        border: 2px solid; /* 初始框线为默认颜色 */
+        padding: 10px; /* 添加内边距 */
+    }
+
+    .correct-message {
+        color: green;
+    }
+
+    .incorrect-message {
+        color: red;
+    }
+
+    .game-container {
+
+        max-width: 800px;
+        margin: 10% auto; /* 上下也增加一些外边距，使容器不会紧贴屏幕边缘 */
+
+    }
+
+
+    .rules-container {
+
+        background-color: #ffffff; /* 容器的背景设为白色 */
+        border-radius: 10px; /* 添加圆角 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* 可选：添加轻微的阴影效果 */
+        max-width: 800px;
+        margin: 10% auto; /* 上下也增加一些外边距，使容器不会紧贴屏幕边缘 */
+        height: 400px;
+
+    }
+
+    .rules-container table {
+        margin: auto; /* 确保表格本身也居中 */
+        width: auto; /* 或者你可以设置一个特定的百分比宽度 */
+    }
+
+    .table-bordered th, .table-bordered td {
+        border: 1px solid #dee2e6 !important;
+    }
+
+        /* 调整段落和列表的文本对齐 */
+    .rules-container p, .rules-container ul {
+        text-align: left; /* 或者根据需要调整为center */
+    }
+
+    .button {
+        display: inline-block; /* 让<a>标签表现得像按钮 */
+        background-color: #575a5e; /* 按钮背景颜色 */
+        color: white; /* 文字颜色 */
+        border: none; /* 无边框 */
+        padding: 10px 20px; /* 内边距 */
+        border-radius: 5px; /* 圆角边框 */
+        margin: 20px auto;
+        cursor: pointer; /* 鼠标悬停时的指针样式 */
+        transition: all 0.3s ease; /* 过渡效果 */
+        text-transform: uppercase; /* 文字大写 */
+        font-weight: bold; /* 字体加粗 */
+        text-align: center; /* 文字居中 */
+        text-decoration: none; /* 去除下划线 */
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2); /* 阴影效果 */
+    }
+
+    .button:hover {
+        background-color: #c4aa00; /* 鼠标悬停时的背景颜色 */
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 鼠标悬停时的阴影效果 */
+    }
+
+    .button:active {
+        background-color: #575a5e; /* 点击时的背景颜色 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 点击时的阴影效果 */
+    }
+
+    .button-right {
+        text-align: center; /* 使容器内的内容靠右对齐 */
+        padding-right: 7%; /* 保持与.rules-container的内边距一致 */
+    }
+    .fixed-footer {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        min-height: 12%;
+        background-color: rgba(255, 255, 255, 0); /* 使用 rgba 设置半透明背景 */
+        padding: 0px; /* 增加一些内边距以提高质感 */
+        box-shadow: 0 0 10% rgba(0, 0, 0, 0.1); /* 添加一个柔和的阴影效果 */
+        z-index: 999; /* 确保固定在顶部 */
+        backdrop-filter: blur(30%); /* 使用模糊效果增强半透明感（仅在部分浏览器支持） */
+        border-bottom: 3px solid #c4aa00;  /* 添加边框 */
+        background-color: #555050;
+        padding-top: 0;
+    }
+
+    button {
+        padding: 10px 20px; /* 按钮内边距 */
+        font-size: 16px; /* 文本大小 */
+        color: #fff; /* 文本颜色 */
+        background-color: #575a5e; /* 按钮背景颜色 */
+        border: none; /* 移除边框 */
+        border-radius: 5px; /* 边角圆滑 */
+        cursor: pointer; /* 鼠标悬停时指针形状 */
+        transition: background-color 0.3s ease, box-shadow 0.3s ease; /* 过渡效果 */
+        outline: none; /* 移除焦点时的轮廓 */
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 添加阴影 */
+    }
+
+        /* 鼠标悬停时的样式 */
+        button:hover {
+            background-color: #c4aa00; /* 深蓝色背景 */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* 鼠标悬停时阴影更明显 */
+        }
+
+        /* 鼠标点击时的样式 */
+        button:active {
+            background-color: #575a5e; /* 更深的蓝色背景 */
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* 恢复原始阴影 */
+        }
+</style>
+<body>
+
+    <div class="fixed-footer">
+    <h1><img class="logo" src="{% static 'hr_tech_scoring/images/logo3.png' %}" alt="Logo"style="width: 300px; height: auto;"></h1>
+    </div>
+
+
+<div class="flex-container">
+    <div class="game-section game-container"><h2>【練習】請判斷這四個組合(橫排)是否為SET？</h2>
+        <form>
+            <table class="bordered-table">
+                <!-- 创建表格以显示图片 -->
+                <tr>
+                    <td>
+                        <img src="{% static 'games/set_game/18.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/19.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/20.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <button id="yes-btn-1">是</button>
+                        <button id="no-btn-1">否</button>
+                    </td>
+                </tr>
+                <!-- 新的消息表格 -->
+                <tr>
+                    <td colspan="4" id="result-message-1" class="result-message"></td>
+                </tr>
+            </table>
+
+            <table class="bordered-table">
+                <!-- 创建表格以显示图片 -->
+                <tr>
+                    <td>
+                        <img src="{% static 'games/set_game/39.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/54.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/26.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <button id="yes-btn-2">是</button>
+                        <button id="no-btn-2">否</button>
+                    </td>
+                </tr>
+                <!-- 新的消息表格 -->
+                <tr>
+                    <td colspan="4" id="result-message-2" class="result-message"></td>
+                </tr>
+            </table>
+
+
+            <table class="bordered-table">
+                <!-- 创建表格以显示图片 -->
+                <tr>
+                    <td>
+                        <img src="{% static 'games/set_game/51.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/60.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/69.jpg'%}" alt="Description of the image" class="number-img" />
+                    </td>
+                    <td>
+                        <button id="yes-btn-3">是</button>
+                        <button id="no-btn-3">否</button>
+                    </td>
+                </tr>
+                <!-- 新的消息表格 -->
+                <tr>
+                    <td colspan="4" id="result-message-3" class="result-message"></td>
+                </tr>
+                <table class="bordered-table">
+                <!-- 创建表格以显示图片 -->
+                <tr>
+                    <td>
+                        <img src="{% static 'games/set_game/57.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/30.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <img src="{% static 'games/set_game/3.jpg'%}" alt="Description of the image" class="number-img"/>
+                    </td>
+                    <td>
+                        <button id="yes-btn-4">是</button>
+                        <button id="no-btn-4">否</button>
+                    </td>
+                </tr>
+                <!-- 新的消息表格 -->
+                <tr>
+                    <td colspan="4" id="result-message-4" class="result-message"></td>
+                </tr>
+            </table>
+                <div class="button-right">
+                <a href="{% url 'set_testpage2' %}" class="button">開始進入測試頁面</button></a>
+                </div>
+
+            </table>
+        </form>
+
+    </div>
+
+
+     <div class="explanation-section rules-container">
+        <h2></h2>
+                <table class='table table-bordered text-center'>
+
+                    <ul>
+                    <li>卡片：每張卡片有四個屬性，分別是<b>數量</b>、<b>顏色</b>、<b>形狀</b>和顏色填充的<b>透明度</b>。</li>
+                    <li>SET：3張卡片的四個屬性要分別判斷，<br><b>數量</b>完全相同或完全不同；<br><b>顏色</b>完全相同或完全不同；<br><b>形狀</b>完全相同或完全不同；<br><b>透明度</b>完全相同或完全不同。<br><b style="background-color: yellow;">以上都符合才是一組SET</b>。</li>
+                    </ul>
+            <tr>
+                <th colspan=2>卡片屬性</th>
+            </tr>
+            <tr>
+                <th>數量</th>
+                <th>1個<img src = "{% static 'games/set_game/q1.png' %}" alt="Description of the image" style="width: 30px; height: auto;">、2個<img src="{%static 'games/set_game/q2.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、3個<img src="{%static 'games/set_game/q3.png'%}" alt="Description of the image" style="width: 30px; height: auto;"></th>
+            </tr>
+            <tr>
+                <th>顏色</th>
+                <th>紫色<img src="{%static 'games/set_game/c1.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、黃色<img src="{%static 'games/set_game/c2.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、藍色<img src="{%static 'games/set_game/c3.png'%}" alt="Description of the image" style="width: 30px; height: auto;"></th>
+            </tr>
+            <tr>
+                <th>形狀</th>
+                <th>魚<img src="{%static 'games/set_game/s1.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、鳥<img src="{%static 'games/set_game/s2.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、貓<img src="{%static 'games/set_game/s3.png'%}" alt="Description of the image" style="width: 30px; height: auto;"></th>
+            </tr>
+            <tr>
+                <th>透明度</th>
+                <th>無填滿<img src="{%static 'games/set_game/透明度無.png'%}" alt="Description of the image" style="width: 30px; height: auto;">、半透明<img src="{% static 'games/set_game/透明度半.png'%}" alt="Description of the image" style="width: 25px; height: auto;">、填滿<img src="{%static 'games/set_game/透明度滿.png'%}" alt="Description of the image" style="width: 25px; height: auto;"></th>
+            </tr>
+                </table>
+
+        </div>
+
+
+
+
+</div>
+
+
+
+
+
+
+
+    <script>
+
+
+        document.getElementById('yes-btn-1').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(true, 1);
+        });
+
+        document.getElementById('no-btn-1').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(false, 1);
+        });
+
+        document.getElementById('yes-btn-2').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(false, 2);
+        });
+
+        document.getElementById('no-btn-2').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(true, 2);
+        });
+
+        document.getElementById('yes-btn-3').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(false, 3);
+        });
+
+        document.getElementById('no-btn-3').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(true, 3);
+        });
+
+        document.getElementById('yes-btn-4').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(true, 4);
+        });
+
+        document.getElementById('no-btn-4').addEventListener('click', function (event) {
+            event.preventDefault();
+            displayResult(false, 4);
+        });
+
+        // 函数用于显示相应的消息
+        function displayResult(isCorrect, groupNumber) {
+            var resultMessageElement = document.getElementById('result-message-' + groupNumber);
+            var borderColor = isCorrect ? 'green' : 'red'; // 正确为绿色，错误为红色
+
+            // 设置文本内容和框的样式
+            if (groupNumber === 2) {
+                resultMessageElement.innerHTML = isCorrect ?
+                    '<span class="correct-message">正確，答案為 "否"。</span>' +
+                    '<br>雖然顏色完全不同(藍色、黃色、紫色)；<br>形狀完全不同(貓、鳥、魚)；<br>透明度完全不同(填滿、無填滿、半透明)。<br>但是數量不符合(1、1、3)。' :
+                    '<span class="incorrect-message">錯誤，答案為 "否"。</span>' +
+                    '<br>雖然顏色完全不同(藍色、黃色、紫色)；<br>形狀完全不同(貓、鳥、魚)；<br>透明度完全不同(填滿、無填滿、半透明)。<br>但是數量不符合(1、1、3)。';
+            } else if (groupNumber === 3) {
+                resultMessageElement.innerHTML = isCorrect ?
+                    '<span class="correct-message">正確，答案為 "否"。</span>' +
+                    '<br>雖然顏色完全不同(紫色、黃色、藍色)；<br>形狀完全相同(魚)；<br>數量完全相同(1、1、1)；<br>但是透明度不符合(填滿、無填滿、無填滿)。' :
+                    '<span class="incorrect-message">錯誤，答案為 "否"。</span>' +
+                    '<br>雖然顏色完全不同(紫色、黃色、藍色)；<br>形狀完全相同(魚)；<br>數量完全相同(1、1、1)；<br>但是透明度不符合(填滿、無填滿、無填滿)。';
+            } else if (groupNumber === 1) {
+                // 默认处理第1组的情况，可以根据需要添加其他组的处理逻辑
+                resultMessageElement.innerHTML = isCorrect ?
+                    '<span class="correct-message">正確，答案為 "是"。</span>' +
+                    '<br>因為顏色完全相同(紫色)；<br>形狀完全相同(鳥)；<br>數量完全不同(1、2、3)；<br>透明度完全相同(半透明)。' :
+                    '<span class="incorrect-message">錯誤，答案為 "是"。</span>' +
+                    '<br>因為顏色完全相同(紫色)；<br>形狀完全相同(鳥)；<br>數量完全不同(1、2、3)；<br>透明度完全相同(半透明)。';
+            } else if (groupNumber === 4) {
+                // 默认处理第1组的情况，可以根据需要添加其他组的处理逻辑
+                resultMessageElement.innerHTML = isCorrect ?
+                    '<span class="correct-message">正確，答案為 "是"。</span>' +
+                    '<br>因為顏色完全相同(黃色)；<br>形狀完全相同(貓)；<br>數量完全相同(1、1、1)；<br>透明度完全不同(無填滿、填滿、半透明)。' :
+                    '<span class="incorrect-message">錯誤，答案為 "是"。</span>' +
+                    '<br>因為顏色完全相同(黃色)；<br>形狀完全相同(貓)；<br>數量完全相同(1、1、1)；<br>透明度完全不同(無填滿、填滿、半透明)。';
+            }
+
+            // 设置框的样式
+            resultMessageElement.style.border = '2px solid ' + borderColor;
+        }
+
+        function highlightButton(groupNumber, isYesButton) {
+            // 获取被点击的按钮元素
+            var clickedButtonId = isYesButton ? 'yes-btn-' + groupNumber : 'no-btn-' + groupNumber;
+            var clickedButton = document.getElementById(clickedButtonId);
+
+            // 获取另一个按钮元素
+            var otherButtonId = isYesButton ? 'no-btn-' + groupNumber : 'yes-btn-' + groupNumber;
+            var otherButton = document.getElementById(otherButtonId);
+
+            // 清除另一个按钮的样式
+            otherButton.style.backgroundColor = '';
+            otherButton.style.borderWidth = '';
+            otherButton.style.fontWeight = '';
+
+            // 设置被点击按钮的样式
+            clickedButton.style.backgroundColor = '#c4aa00'; // 设置为黄色背景
+            clickedButton.style.borderWidth = '3px';
+            clickedButton.style.fontWeight = 'bold';
+        }
+
+        // 为第一组的 "是" 和 "否" 按钮添加事件监听器
+        document.getElementById('yes-btn-1').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(1, true);
+        });
+        document.getElementById('no-btn-1').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(1, false);
+        });
+
+        // 为第二组的 "是" 和 "否" 按钮添加事件监听器
+        document.getElementById('yes-btn-2').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(2, true);
+        });
+        document.getElementById('no-btn-2').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(2, false);
+        });
+
+        // 为第三组的 "是" 和 "否" 按钮添加事件监听器
+        document.getElementById('yes-btn-3').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(3, true);
+        });
+        document.getElementById('no-btn-3').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(3, false);
+        });
+        // 为第四组的 "是" 和 "否" 按钮添加事件监听器
+        document.getElementById('yes-btn-4').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(4, true);
+        });
+        document.getElementById('no-btn-4').addEventListener('click', function (event) {
+            event.preventDefault();
+            highlightButton(4, false);
+        });
+
+        document.addEventListener("visibilitychange", function() {
+            if (document.visibilityState === 'hidden') {
+                navigator.sendBeacon("/games/set/leave_page/", JSON.stringify({visit_id: '{{ visit_id }}', leave_time: new Date().toISOString()}));
+            }
+        });
+
+        window.addEventListener("beforeunload", function(e) {
+            navigator.sendBeacon("/games/set/leave_page/", JSON.stringify({visit_id: '{{ visit_id }}', leave_time: new Date().toISOString()}));
+        });
+
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>測驗结束</title>
+</head>
+<body>
+    <form method="post" action="{% url 'game_select' %}">
+        {% csrf_token %}
+    <h1>謝謝作答，測驗结束!</h1>
+    <p>您的總得分是: {{ score }}</p>
+    <button type="submit">回到遊戲選擇介面</button>
+    </form>
+</body>
+
+<script>
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
+</script>
+</html>

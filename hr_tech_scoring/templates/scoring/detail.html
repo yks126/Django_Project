@@ -1,0 +1,768 @@
+{% load static %}
+
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>履歷評分</title>
+    <style>
+         body {
+            font-family: 'Arial', sans-serif; /* 使用易读的字体 */
+            color: #4d4d4d; /* 深灰色作为基本字体颜色，确保良好的可读性 */
+            line-height: 1.6; /* 行高提升可读性 */
+            background-color: #f4f4f4; /* 背景 */
+        }
+
+
+         /* logo樣式 */
+         .fixed-footer .logo {
+            position: absolute;
+            top: 5%; /* 根据需要调整 */
+            left: 1%; /* 根据需要调整 */
+            height: 20%; /* 根据实际logo大小调整 */
+            width: auto; /* 保持logo的宽高比 */
+        }
+        .logo {
+          margin-right:0;
+        }
+        /* 標題樣式 */
+        h1 {
+            text-align: center; /* 标题居中 */
+            color: #ffffff;
+
+        }
+        /* 證照.highlight樣式 */
+        .highlight {
+            background-color: #fff200; /* 鲜明的黄色背景 */
+            color: #000000; /* 黑色文字，确保可读性 */
+            font-weight: bold; /* 加粗字体，增加突出效果 */
+        }
+
+
+        /* 自傳樣式 */
+        pre {
+            /* 设置所有 <pre> 标签的字体大小为 12px */
+        }
+
+        /* 標題懸浮效果 */
+        .header-container {
+            display: flex; /* 启用Flex布局 */
+            align-items: center; /* 垂直居中对齐子元素 */
+            justify-content: space-between;  子元素之间的空间平均分布 */
+            flex-wrap: wrap; /* 允许子元素在必要时换行 */
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: rgba(255, 255, 255, 0); /* 使用 rgba 设置半透明背景 */
+            padding: 0px; /* 增加一些内边距以提高质感 */
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.1); /* 添加一个柔和的阴影效果 */
+            z-index: 999; /* 确保固定在顶部 */
+            backdrop-filter: blur(100px); /* 使用模糊效果增强半透明感（仅在部分浏览器支持） */
+            border-bottom: 3px solid #c4aa00;  /* 添加边框 */
+            background-color: #555050;
+            padding-top: 0;
+        }
+
+         .header-title {
+            margin: 0 auto; /* 标题居中显示 */
+        }
+
+         .text-right {
+            display: flex; /* 启用Flex布局 */
+            justify-content: flex-end; /* 将按钮组靠右对齐 */
+            gap: 5%; /* 设置按钮之间的间隙 */
+        }
+
+        /* 裝置"履歷內容"(left-content)與"評分內容"(score-content)的容器 */
+        .flex-container {
+            display: flex;
+            justify-content: space-between; /* 将内容对齐到容器的两端 */
+            overflow-x: auto;
+
+        }
+
+        /* 左半邊履歷內容 */
+        .left-content {
+            right: 5%;
+            padding-top: 15%;
+        }
+        /* 內容文字調整 */
+        #content {
+          width: 60%;
+          transition: font-size 0.3s;
+        }
+        /* 右半邊評分內容與懸浮效果 */
+        .score-content {
+            position: fixed;/* 懸浮 */
+            top: 0; /* 距离顶部的位置 */
+            right:0; /* 距离左侧的位置 */
+            width: 33%; /* 根据需要调整宽度 */
+            height: 100%; /* 高度设置为100%，也可以根据需要调整 */
+            overflow-y: auto; /* 如果内容超出高度，允许滚动 */
+            border-left: 3px solid #c4aa00;  /* 添加边框 */
+            padding-top: 8%;
+            background-color: #555050;
+        }
+
+        /* 右半邊按钮容器样式 */
+        .buttons-container {
+            display: flex;
+            justify-content: center; /* 居中对齐 */
+            flex-wrap: wrap; /* 允许项目换行 */
+            gap: 0px; /* 项目间隔 */
+            margin-bottom: 0; /* 与下方内容的间隔 */
+
+        }
+
+
+        /* 添加响应式设计，当屏幕宽度较小时，左右内容各占 100% 的宽度 */
+        @media only screen and (max-width: 50%) {
+            .left-content,
+            .right-content {
+                width: 100%;
+            }
+            .buttons-container {
+            flex-direction: column; /* 在小屏幕上按钮垂直排列 */
+    }
+        }
+
+         /* 履歷內容按钮樣式 */
+        .toggle-button {
+            transition: background-color 0.3s ease; /* 添加过渡效果 */
+            background-color: rgb(85, 80, 80); /* 明亮的金色 */ /* 按钮的背景颜色 */
+            color: white; /* 文字颜色 */
+            padding: 1% 1%; /* 内边距 */
+            margin: 1% 0; /* 外边距 */
+            border: none; /* 无边框 */
+            cursor: pointer; /* 鼠标样式 */
+            border-radius: 5px; /* 圆角边框 */
+            font-size: 0.65em; /* 字体大小 */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 为按钮添加阴影 */
+        }
+        .toggle-button:hover {
+            background-color: rgba(196, 170, 0, 0.6); /* 深金色 */ /* 鼠标悬停时的背景颜色 */
+            box-shadow: none; /* 鼠标悬停时取消阴影 */
+        }
+
+        /* 評分內容按钮樣式 */
+         .toggle_2-button {
+            transition: background-color 0.3s ease; /* 添加过渡效果 */
+            background-color: #c4aa00; /* 明亮的金色 */ /* 按钮的背景颜色 */
+            color: white; /* 文字颜色 */
+            padding: 1% 1%; /* 内边距 */
+            margin: 1% 0; /* 外边距 */
+            border: none; /* 无边框 */
+            cursor: pointer; /* 鼠标样式 */
+            border-radius: 5px; /* 圆角边框 */
+            font-size: 1em; /* 字体大小 */
+            box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2); /* 为按钮添加阴影 */
+        }
+        .toggle_2-button:hover {
+            background-color: rgba(196, 170, 0, 0.6); /* 深金色 */ /* 鼠标悬停时的背景颜色 */
+            box-shadow: none; /* 鼠标悬停时取消阴影 */
+        }
+
+        /* 履歷內容表格樣式 */
+        table {
+            width: 100%; /* 表格宽度占满容器 */
+            border-collapse: collapse; /* 边框合并为单一边框 */
+            margin: 20px 0; /* 上下边距 */
+            background-color: white; /* 表格背景色 */
+            font-size: 0.9em;
+            font-family: 'Arial', sans-serif;
+            min-width: 30%;
+            box-shadow: 0 0 20px rgba(0,0,0,0.15);
+
+        }
+
+        /* 鏈接樣式 */
+        a {
+            color: #ffffff;  /* 链接颜色 */
+            text-decoration: none; /* 去除下划线 */
+        }
+        a:hover {
+            text-decoration: underline; /* 鼠标悬停时下划线 */
+        }
+
+        /* 內容樣式 */
+        th, td {
+            border: 1px solid #ddd; /* 单元格边框 */
+            padding: 8px; /* 单元格内边距 */
+            text-align: left; /* 文本对齐方式 */
+            font-size: 1em; /* 字体大小 */
+
+        }
+
+        th {
+            background-color: #f4f4f4; /* 表头背景颜色 */
+            color: #333; /* 表头文字颜色 */
+        }
+        tr:nth-child(even) {
+            background-color: #f9f9f9; /* 交替行的背景颜色 */
+        }
+
+
+
+        /* 評分內容表格樣式 */
+        .special-highlight {
+            background-color: #e5e4e4; /* 浅黃色背景 */
+            border: 2px solid #c4aa00; /* 蓝色边框 */
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            border-radius: 10px; /* 圆角 */
+            padding: 5%; /* 内边距 */
+            margin: 2% auto; /* 外边距，自动水平居中 */
+            width: auto; /* 宽度自适应内容 */
+            max-width: 100%; /* 最大宽度，根据需要调整 */
+            box-sizing: border-box; /* 边框包含在宽度内 */
+            margin-bottom: 0 5%;
+        }
+        .special-highlight th {
+            background-color: #c4aa00; /* 深金色 */
+            color: white;
+            font-size: 16px;
+        }
+        .special-highlight td {
+            font-weight: bold;
+            font-size: 16px;/* 加粗字体 */
+
+        }
+         .special-highlight tr:hover {
+            background-color: #faf4d6;
+        }
+
+        /* 拉桿樣式 */
+        #font-size-control {
+            width: 25%;
+            height: 5px;
+            background: #ddd;
+            border-radius: 5px;
+            appearance: none;
+            outline: none;
+            margin-top: 2%;
+        }
+        /* 拉桿按鈕樣式 */
+        #font-size-control::-webkit-slider-thumb {
+          appearance: none;
+          width: 18px;
+          height: 18px;
+          background: #e0c514;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        .range-label {
+            font-size: 16px;
+            margin-right: 1%;
+            white-space: nowrap;
+            color: #ffffff;
+            margin-top: 0;
+        }
+
+        /* 重置、上一頁、下一頁、返回主頁按钮 */
+        button {
+            font-size: 16px; /* 增大字体大小 */
+            padding: 1.5% 3%; /* 增加内边距，使按钮更大 */
+            margin: 1%; /* 为按钮添加外边距，确保它们之间有空间 */
+            cursor: pointer; /* 鼠标悬停时显示指针 */
+            border: none; /* 移除边框 */
+            border-radius: 5px; /* 添加边框圆角 */
+            background-color: #fdfdfd; /* 设置背景颜色 */
+            color: #555050; /* 设置文字颜色 */
+        }
+
+        button:hover {
+            background-color: #fbfcfb; /* 鼠标悬停时改变背景颜色 */
+        }
+
+        /* 表格設置 */
+        .container {
+          padding: 0 2%;
+        }
+
+        table {
+          width: 100%;
+          box-sizing: border-box;
+          padding: 0 1%;
+        }
+
+        /* 訊息設置 */
+        .message-box {
+            display: inline-block; /* 使消息框水平排列，而不会占据整行 */
+            margin-left: 1%; /* 可根据需要调整距离按钮的间距 */
+            color: white; /* 设置文本颜色为白色 */
+        }
+
+
+        .note_table {
+            width: 100%;
+            border-collapse: collapse;
+            border: 2px solid #c4aa00;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
+            border-radius: 10px; /* 圆角 */
+            padding: 5%; /* 内边距 */
+            margin: 5% auto; /* 外边距，自动水平居中 */
+            width: auto; /* 宽度自适应内容 */
+            max-width: 100%; /* 最大宽度，根据需要调整 */
+            box-sizing: border-box; /* 边框包含在宽度内 */
+            margin-bottom: 3%;
+        }
+
+        .note_table th,
+        .note_table td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+            font-size: 16px;
+        }
+
+        .note_table th {
+            background-color: #c4aa00;
+            color: white;
+
+        }
+
+        .note_table tr:hover {
+            background-color: #faf4d6;
+        }
+
+         #language_abilitySection {
+            display: flex; /* 启用Flexbox布局 */
+            align-items: center; /* 垂直居中对齐 */
+            gap: 20px; /* 设置标题和段落之间的间距 */
+            padding-top: 0px
+        }
+
+        #language_abilitySection h2 {
+            margin: 0; /* 移除h2的默认外边距 */
+        }
+
+        #language_abilitySection p {
+            margin: 0; /* 移除段落的默认外边距 */
+        }
+
+        .navigation-button {
+        padding: 8px 12px; /* 调整内边距 */
+        margin: 0 2px; /* 调整外边距 */
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #fdfdfd;
+        color: #555050;
+        transition: background-color 0.3s ease, color 0.3s ease;
+    }
+
+    .navigation-button:hover {
+        background-color: #eaeaea;
+        color: #333;
+    }
+    </style>
+</head>
+
+<form  method="post">
+{% csrf_token %}
+<body>
+
+
+<div class="header-container">
+
+        <img class="logo" src="{% static 'hr_tech_scoring/images/logo3.png' %}" alt="Logo" style="width: 300px; height: auto;">
+        <h1>第{{ row_id_index }}份履歷，目前共評{{ len_row_id_scored }}份</h1>
+        <div class="text-right">
+            <!-- 介绍部分展开状态的隐藏输入字段 -->
+            <input type="hidden" name="expand_edu" id="expand_edu" value='0'>
+            <input type="hidden" name="expand_experience" id="expand_experience" value='0'>
+            <input type="hidden" name="expand_intro" id="expand_intro" value='0'>
+
+
+            <div style="text-align: center;">
+                <!-- 添加返回主页的链接 -->
+                {% if row_id_index > 1 %}
+                    <button type="submit" name="action_page" value="previous" class="navigation-button">上一頁</button>
+                {% endif %}
+                {% if row_id_index < len_row_id_scored %}
+                    <button type="submit" name="action_page" value="next" class="navigation-button">下一頁</button>
+                {% endif %}
+                <button type="submit" name="action_page" value="home_page" class="navigation-button">返回主頁</button>
+            </div>
+        </div>
+</div>
+
+
+<div class="flex-container">
+
+    <div class="score-content">
+{#        <div class="buttons-container">#}
+{#            <button onclick="reorderSections('eduSection')" class="toggle_2-button">教育程度</button>#}
+{#            <button onclick="reorderSections('experienceSection')" class="toggle_2-button">工作經歷</button>#}
+{#            <button onclick="reorderSections('r_experienceSection')" class="toggle_2-button">工作經歷說明表</button>#}
+{#            <button onclick="reorderSections('introSection')" class="toggle_2-button">自傳</button>#}
+{#            <button onclick="reorderSections('language_abilitySection')" class="toggle_2-button">語言能力</button>#}
+{#            <button onclick="reorderSections('licenseSection')" class="toggle_2-button">證照</button>#}
+{#        </div>#}
+
+        <div class="buttons-container">
+            <span class="range-label">左方文字大小調整</span>
+            <input type="range" min="12" max="24" value="16" id="font-size-control">
+            <button type="button" onclick="resetSize()">重置</button>
+        </div>
+            <div class="container">
+                <span class="range-label">※ 請根據履歷內容，評價求職者是否可以進入面試：</span>
+                <table class="special-highlight">
+                    <tr>
+                        <th>評分項</th>
+                        <th>不適合 (0分)</th>
+                        <th>適合 (1分)</th>
+                        <th>非常適合 (2分)</th>
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                無經驗櫃員
+                            {% else %}
+                                無經驗程式設計員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_1 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                有經驗櫃員
+                            {% else %}
+                                有經驗程式設計員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_2 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                無經驗理專
+                            {% else %}
+                                無經驗資安人員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_3 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                    <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                有經驗理專
+                            {% else %}
+                                有經驗資安人員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_4 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                                        <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                無經驗儲備幹部
+                            {% else %}
+                                無經驗資訊人員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_5 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                                        <tr>
+                        <td>
+                            {% if row_data.type == "一般" %}
+                                有經驗儲備幹部
+                            {% else %}
+                                有經驗資安人員
+                            {% endif %}
+                        </td>
+                        {% for choice in  form.score_6 %}
+                            <td>{{ choice }}</td>
+                        {% endfor %}
+                    </tr>
+                </table>
+            </div>
+        <div class="container">
+            <span class="range-label">※ 進行標記、備註，以便回溯修改評比結果：</span>
+            <table class="note_table">
+                <tr>
+                    <th scope="row">標記本履歷：</th>
+                    <td>{{ form.marked }}</td>
+                </tr>
+                <tr>
+                    <th scope="row">備註：</th>
+                    <td>{{ form.notes }}</td>
+                </tr>
+            </table>
+
+        {% if messages %}
+            <script>
+                document.addEventListener('DOMContentLoaded', function() {
+                    {% for message in messages %}
+                        alert("{{ message }}");
+                    {% endfor %}
+                });
+            </script>
+        {% endif %}
+
+            <div style="text-align: right;">
+
+
+
+                <button type="submit" name="action_page" >儲存結果</button>
+
+                <button type="submit" name="action_page" value="new_resume">新一份履歷</button>
+
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <div id="content">
+
+        <div class="left-content" >
+
+            <div id="language_abilitySection">
+                <h2>基本資料</h2>
+                <p>性別：{{ row_data.gender }}性 <br>
+                    年齡：{{ row_data.age }}歲 <br>
+                </p>
+            </div>
+        <div> <!-- 添加上边距 -->
+            <h2 style="display: inline;">外語能力</h2><p style="display: inline; margin-left: 20px;">{{ row_data.language_ability }}</p>
+        </div>
+
+            <div id="eduSection">
+                        <h2>教育程度與證照 <button type="button" name="eduButton" id="eduButton" class="toggle-button"></button></h2>
+                        <div id="educationTable" style="display:none;">
+                            <div class="container">
+                                <p><strong>  ➢學歷</strong></p>
+                                <table>
+                                    <tr>
+                                        <th>學校</th>
+                                        <th>科系所(日/夜間部)</th>
+                                        <th>畢業/肄業</th>
+                                        <th>修業期間</th>
+                                        <th>時長</th>
+                                    </tr>
+                                    {% for edu_entry in row_data.edu %}
+                                    <tr>
+                                        <td>{{ edu_entry.0 }}</td>
+                                        <td>{{ edu_entry.1 }}</td>
+                                        <td>{{ edu_entry.2 }}</td>
+                                        <td>{{ edu_entry.4 }}</td>
+                                        <td>{{ edu_entry.3 }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+
+                                <p><strong>  ➢持有證照(自填)： </strong><br>{{ row_data.license }}</p>
+                                <p><strong>  ➢主要金融證照</strong></p>
+                                <table>
+                                    <tr>
+                                        <th>證券類</th>
+                                        <th>保險類</th>
+                                        <th>銀行類</th>
+                                    </tr>
+                                    {% for license in license_data %}
+                                        <tr>
+                                            <td class="{% if license.license_1highlight %}highlight{% endif %}">
+                                                {{ license.license_1type }}
+                                            </td>
+                                            <td class="{% if license.license_2highlight %}highlight{% endif %}">
+                                                {{ license.license_2type }}
+                                            </td>
+                                            <td class="{% if license.license_3highlight %}highlight{% endif %}">
+                                                {{ license.license_3type }}
+                                            </td>
+                                        </tr>
+                                    {% endfor %}
+                                </table>
+
+
+
+                            </div>
+                        </div>
+
+            </div>
+            <div id="experienceSection">
+
+                        <h2>工作經歷與職務說明表 <button type="button" name="experienceButton" id="experienceButton" class="toggle-button"></button></h2>
+
+                        <div id="experienceTable" style="display:none;">
+                            <div class="container">
+                                <table>
+                                    <tr>
+                                        <th>機構名稱</th>
+                                        <th>工作部門及職稱</th>
+                                        <th>職務內容</th>
+                                        <th>職務說明</th>
+                                        <th>任職期間</th>
+                                        <th>時長</th>
+                                    </tr>
+                                    {% for experience_entry in row_data.experience %}
+
+                                            <tr>
+                                                <td>{{ experience_entry.0 }}</td>
+                                                <td>{{ experience_entry.1 }}</td>
+                                                <td>{{ experience_entry.2 }}</td>
+                                                <td>{{ experience_entry.4 }}</td>
+                                                <td>{{ experience_entry.5 }}</td>
+                                                <td>{{ experience_entry.3 }}</td>
+                                            </tr>
+
+                                    {% endfor %}
+                                </table>
+
+                            </div>
+                        </div>
+            </div>
+
+            <div id="introSection">
+
+                        <h2>自傳 <button type="button" name="introButton" id="introButton" class="toggle-button"></button></h2>
+
+
+                    <div id="introTable" style="display:none;">
+                        <td><pre id="intro" style="font-size: 18px;">{{row_data.intro}}</pre></td>
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+<script>
+
+    document.addEventListener("DOMContentLoaded", function() {
+        // 获取按钮和对应的表格
+        var eduButton = document.getElementById("eduButton");
+        var educationTable = document.getElementById("educationTable");
+        var experienceButton = document.getElementById("experienceButton");
+        var experienceTable = document.getElementById("experienceTable");
+        var introButton = document.getElementById("introButton");
+        var introTable = document.getElementById("introTable");
+
+        // 初始化状态为 False
+        var expand_edu = localStorage.getItem('expand_edu') === 'true';
+        var expand_experience = localStorage.getItem('expand_experience') === 'true';
+        var expand_intro = localStorage.getItem('expand_intro') === 'true';
+        // 根据状态设置按钮文本和表格可见性
+        setButtonState(expand_edu, eduButton, educationTable);
+        setButtonState(expand_experience, experienceButton, experienceTable);
+        setButtonState(expand_intro, introButton, introTable);
+
+        // 按钮点击事件，改变状态并更新界面，避免页面刷新
+        eduButton.addEventListener("click", function(event) {
+            expand_edu = !expand_edu;
+            document.getElementById('expand_edu').value = '1'; // 更新隐藏字段的值
+            setButtonState(expand_edu, eduButton, educationTable);
+            event.preventDefault(); // 阻止任何默认行为，如表单提交
+        });
+
+        experienceButton.addEventListener("click", function(event) {
+            expand_experience = !expand_experience;
+            document.getElementById('expand_experience').value = '1'; // 更新隐藏字段的值
+            setButtonState(expand_experience, experienceButton, experienceTable);
+            event.preventDefault();
+        });
+
+        introButton.addEventListener("click", function(event) {
+            expand_intro = !expand_intro;
+            document.getElementById('expand_intro').value = '1'; // 更新隐藏字段的值
+            setButtonState(expand_intro, introButton, introTable);
+            event.preventDefault();
+        });
+
+
+        // 设置按钮文本和表格可见性
+        function setButtonState(expand, button, table) {
+            if (expand) {
+                table.style.display = "block";
+                button.textContent = "- 收起";
+            } else {
+                table.style.display = "none";
+                button.textContent = "+ 展開";
+            }
+        }
+    });
+
+
+//////////////////////////////////
+// 調整區塊位置
+    function reorderSections(selectedSectionId) {
+    var contentWrapper = document.getElementsByClassName("left-content")[0];
+    var selectedSection = document.getElementById(selectedSectionId);
+    contentWrapper.prepend(selectedSection);
+    }
+//////////////////////////////////
+
+// 調整文字大小
+    // 获取内容容器
+    var content = document.getElementById("content");
+    var intro = document.getElementById("intro");
+    // 获取范围输入框
+    var fontSizeControl = document.getElementById("font-size-control");
+    var intro = document.getElementById("intro");
+    // 获取内容默认字体大小
+    var defaultFontSize = getComputedStyle(content).fontSize;
+    // 输入变化时调整文字大小
+    fontSizeControl.addEventListener("input", function() {
+      var size = this.value + "px";
+      content.style.fontSize = size;
+      intro.style.fontSize = size;
+    });
+
+    // 重置按钮点击时恢复默认
+    function resetSize() {
+      // 重置内容字体大小
+      content.style.fontSize = defaultFontSize;
+      intro.style.fontSize = "18px";
+      // 重置输入框值
+      fontSizeControl.value = parseInt(defaultFontSize);
+    }
+
+
+    $(document).ready(function() {
+        // 为每个展开按钮捕获点击事件
+        $('.toggle-button').click(function() {
+            // 获取按钮的自定义属性，以确定用户按下的是哪个按钮
+            var buttonId = $(this).attr('id');
+            var action = '';
+
+            if (buttonId === 'eduButton') {
+                action = 'expand_edu';
+            } else if (buttonId === 'experienceButton') {
+                action = 'expand_experience';
+            } else if (buttonId === 'introButton') {
+                action = 'expand_intro';
+            }
+        });
+    });
+
+
+
+
+</script>
+
+{% if form.errors %}
+<script>
+alert("請評分所有項目。");
+</script>
+{% endif %}
+
+</body>
+</form>
+</html>

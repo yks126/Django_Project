@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post">
+        {% csrf_token %}
+        <table>
+            <thead>
+                <tr>
+                    <th>Score 1</th>
+                    <th>Score 2</th>
+                    <th>Score 3</th>
+                    <th>Score 4</th>
+                    <th>Score 5</th>
+                    <th>Total Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>{{ score_1 }}</td>
+                    <td>{{ score_2 }}</td>
+                    <td>{{ score_3 }}</td>
+                    <td>{{ score_4 }}</td>
+                    <td>{{ score_5 }}</td>
+                    <td>
+                        {% with total=score_1|add:score_2|add:score_3|add:score_4|add:score_5 %}
+                            {{ total }}
+                        {% endwith %}
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <button type="submit">回到遊戲選擇介面</button>
+    </form>
+</body>
+
+<script>
+  history.pushState(null, null, location.href);
+  window.onpopstate = function () {
+    history.go(1);
+  };
+</script>
+</html>
